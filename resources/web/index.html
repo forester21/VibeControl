@@ -5,6 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foundation for Sites</title>
+    <!--Подключение библиотек-->
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/list.css">
@@ -18,6 +19,7 @@
 <body>
 <section class="block-list">
     <header>All music</header>
+    <!--Список треков-->
     <ul id="all_music" class="qq">
         <li class="track">
             <p class="list-header"><img id="track" src="https://lorempixel.com/30/30/animals" class="" height=""
@@ -29,21 +31,28 @@
                                         alt="">Second Track</p>
         </li>
     </ul>
+    <!--Хочу больше треков-->
     <header id="more">More</header>
 </section>
 <script type="text/javascript">
+//    По клику делается запрос на 10 новых треков и добавляется к списку
     $(document).ready(function () {
-        //append music
+//        По клику
         $("#more").click(function () {
+//            отправляем запрос
             $.getJSON("/getTracks", function (data) {
+//                ответ приходит в формате JSON [{trackName:"1.mp3"},{trackName:"2.mp3"}]
+//                Здесь мы его обрабатываем
+//                берем каждый элемент из массива который пришел
                 $.each(data, function (index, value) {
+//                    Создаем html элементы списка(<li>) и самой подписи (<p>) и наполняем значениями
                     var trackWrapper = document.createElement("li");
                     trackWrapper.setAttribute("class", "track");
 
                     var track = document.createElement("p");
                     track.innerText = value.trackName;
                     track.setAttribute("class", "list-header");
-
+//                    Присобачиваем к существующему html-коду
                     trackWrapper.append(track);
                     $("#all_music").append(trackWrapper);
                 });
@@ -53,11 +62,12 @@
 </script>
 <script>
     $(document).ready(function () {
+//        По клику на трек отправляется запрос на сервер с информацией о том, на какой трек жмакнули
         $("#all_music").on("click", ".track", function () {
             $.ajax({
                 type: "POST",
                 url: "/play",
-                data: $(this).text(), // <-- Pugit remote add shared ../hello.gitt comma here
+                data: $(this).text(),
                 contentType: 'text/plain'
             })
         });
