@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>forester.project</groupId>
+    <artifactId>vibecontrol</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <!--<properties>-->
+        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+        <!--<org.springframework.version>4.3.12.RELEASE</org.springframework.version>-->
+        <!--<org.springframework.security.version>4.2.3.RELEASE</org.springframework.security.version>-->
+        <!--<org.springframework.data.version>1.13.8.RELEASE</org.springframework.data.version>-->
+        <!--<org.hibernate.version>5.2.11.Final</org.hibernate.version>-->
+    <!--</properties>-->
+
+    <!--<dependency>-->
+        <!--<groupId>org.apache.httpcomponents</groupId>-->
+        <!--<artifactId>httpclient</artifactId>-->
+        <!--<version>4.5.5</version>-->
+    <!--</dependency>-->
+
+    <!--<dependencies>-->
+        <!--<dependency>-->
+            <!--<groupId>log4j</groupId>-->
+            <!--<artifactId>log4j</artifactId>-->
+            <!--<version>1.2.17</version>-->
+        <!--</dependency>-->
+    <!--</dependencies>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.2.3.v20140905</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>9.2.3.v20140905</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+            <version>2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-jetty-http</artifactId>
+            <version>2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-moxy</artifactId>
+            <version>2.7</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.sun.jersey</groupId>-->
+            <!--<artifactId>jersey-json</artifactId>-->
+            <!--<version>1.19</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--<build>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-site-plugin</artifactId>-->
+                <!--<version>3.0</version>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
+
+</project>

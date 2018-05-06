@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundation for Sites</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/list.css">
+    <style>
+        .qq:focus {
+            outline: none;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<section class="block-list">
+    <header>All music</header>
+    <ul id="all_music" class="qq">
+        <li class="track">
+            <p class="list-header"><img id="track" src="https://lorempixel.com/30/30/animals" class="" height=""
+                                        width=""
+                                        alt="">First Track</p>
+        </li>
+        <li class="track">
+            <p class="list-header"><img src="https://lorempixel.com/30/30/animals" class="" height="" width=""
+                                        alt="">Second Track</p>
+        </li>
+    </ul>
+    <header id="more">More</header>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //append music
+        $("#more").click(function () {
+            $.getJSON("/getTracks", function (data) {
+                $.each(data, function (index, value) {
+                    var trackWrapper = document.createElement("li");
+                    trackWrapper.setAttribute("class", "track");
+
+                    var track = document.createElement("p");
+                    track.innerText = value.trackName;
+                    track.setAttribute("class", "list-header");
+
+                    trackWrapper.append(track);
+                    $("#all_music").append(trackWrapper);
+                });
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#all_music").on("click", ".track", function () {
+            $.ajax({
+                type: "POST",
+                url: "/play",
+                data: $(this).text(), // <-- Pugit remote add shared ../hello.gitt comma here
+                contentType: 'text/plain'
+            })
+        });
+    });
+</script>
+
+
+<!--<script src="js/vendor/jquery.js"></script>-->
+<!--<script src="js/vendor/what-input.js"></script>-->
+<!--<script src="js/vendor/foundation.js"></script>-->
+<!--<script src="js/app.js"></script>-->
+</body>
+</html>
