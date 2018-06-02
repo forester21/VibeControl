@@ -1,5 +1,6 @@
 package web;
 
+import app.Main;
 import app.Player;
 
 import javax.ws.rs.*;
@@ -24,7 +25,7 @@ public class EntryPoint {
     @GET
     @Path("getTracks")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Track> getTracks() throws Exception {
+    public Track[] getTracks() throws Exception {
         return Player.getTracks();
     }
 
@@ -32,9 +33,35 @@ public class EntryPoint {
     @Path("play")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public String play(String message) throws Exception {
-        System.out.println(message);
-        Player.play(message);
-        return "it's OK";
+    public String play(int id) throws Exception {
+        System.out.println(id);
+        int previousTrackId = Player.getCurrentPlayingId();
+        Player.play(id);
+        return String.valueOf(previousTrackId);
+    }
+
+    @POST
+    @Path("search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Track[] search(String searchString){
+        System.out.println(searchString);
+        if (searchString==null){
+            return null;
+        }
+        return Player.getTrackStartingWith(searchString.toUpperCase());
+    }
+
+    @GET
+    @Path("lower")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String volumeLower() throws Exception {
+        return Main.volumeLower();
+    }
+
+    @GET
+    @Path("higher")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String volumeHigher() throws Exception {
+        return Main.volumeHgher();
     }
 }

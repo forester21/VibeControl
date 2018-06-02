@@ -9,7 +9,13 @@
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/list.css">
+    <link rel="stylesheet" href="css/search_field.css">
+    <!--<script src="js/vibecontrol.js" type="text/javascript"></script>-->
     <style>
+        .another_colour_of_header {
+            background-color: #0c3d5d;
+        }
+
         .qq:focus {
             outline: none;
         }
@@ -18,45 +24,81 @@
 </head>
 <body>
 <section class="block-list">
-    <header>All music</header>
-    <!--Список треков-->
-    <ul id="all_music" class="qq">
-        <li class="track">
-            <p class="list-header"><img id="track" src="https://lorempixel.com/30/30/animals" class="" height=""
-                                        width=""
-                                        alt="">First Track</p>
-        </li>
-        <li class="track">
-            <p class="list-header"><img src="https://lorempixel.com/30/30/animals" class="" height="" width=""
-                                        alt="">Second Track</p>
-        </li>
-    </ul>
-    <!--Хочу больше треков-->
-    <header id="more">More</header>
+    <div id="all_tracks">
+        <header id="goto_playlist" style="background: #CC0066;">ALL TRACKS</header>
+        <!--search toolbar-->
+        <ul>
+            <div class="input-group input-group-rounded" style="padding-top: 10px;">
+                <input id="search" class="input-group-field" type="search">
+                <div class="input-group-button">
+                    <input id="search_button" type="submit" class="button secondary" value="Search">
+                </div>
+            </div>
+        </ul>
+        <!--Список треков-->
+        <ul id="all_music" class="qq">
+            <!--<li class="track">-->
+                <!--<p>First Track</p>-->
+                <!--<p id="aaa" class="playlist_button">✅</p>-->
+            <!--</li>-->
+            <!--<li class="track">-->
+            <!--<p class="list-header"><img src="https://lorempixel.com/30/30/animals" class="" height="" width=""-->
+            <!--alt="">Second Track</p>-->
+            <!--</li>-->
+        </ul>
+        <!--Хочу больше треков-->
+        <header id="more">More</header>
+    </div>
+    <div id="playlist" style="display:none;">
+        <header id="goto_all_tracks" style="background: #336699;">PLAYLIST</header>
+        <!--volume toolbar-->
+        <ul>
+            <li>
+                <p id="volume_lower">➖</p>
+                <p id="volume">1.0</p>
+                <p id="volume_higher">➕</p>
+            </li>
+        </ul>
+        <!--Плейлист-->
+        <!--<ul id="playlist_list" class="qq">-->
+        <!--</ul>-->
+    </div>
 </section>
+
+<script>
+    function printTracksFromResponse(data) {
+//                ответ приходит в формате JSON [{trackName:"1.mp3"},{trackName:"2.mp3"}]
+//                Здесь мы его обрабатываем
+//                берем каждый элемент из массива который пришел
+        $.each(data, function (index, value) {
+//                    Создаем html элементы списка(<li>) и самой подписи (<p>) и наполняем значениями
+            var trackWrapper = document.createElement("li");
+            trackWrapper.setAttribute("class", "track");
+            trackWrapper.setAttribute("track_id", value.id);
+
+
+            var track = document.createElement("p");
+            track.innerText = value.trackName;
+
+            var addToPlaylistButton = document.createElement("p");
+            //Here stands "+" emoji
+            addToPlaylistButton.innerText = "➕";
+            addToPlaylistButton.setAttribute("class", "playlist_button");
+//          Присобачиваем к существующему html-коду
+            trackWrapper.append(track);
+            trackWrapper.append(addToPlaylistButton);
+            $("#all_music").append(trackWrapper);
+        });
+    }
+</script>
+
 <script type="text/javascript">
-//    По клику делается запрос на 10 новых треков и добавляется к списку
+    //    По клику делается запрос на N новых треков и добавляется к списку
     $(document).ready(function () {
 //        По клику
         $("#more").click(function () {
 //            отправляем запрос
-            $.getJSON("/getTracks", function (data) {
-//                ответ приходит в формате JSON [{trackName:"1.mp3"},{trackName:"2.mp3"}]
-//                Здесь мы его обрабатываем
-//                берем каждый элемент из массива который пришел
-                $.each(data, function (index, value) {
-//                    Создаем html элементы списка(<li>) и самой подписи (<p>) и наполняем значениями
-                    var trackWrapper = document.createElement("li");
-                    trackWrapper.setAttribute("class", "track");
-
-                    var track = document.createElement("p");
-                    track.innerText = value.trackName;
-                    track.setAttribute("class", "list-header");
-//                    Присобачиваем к существующему html-коду
-                    trackWrapper.append(track);
-                    $("#all_music").append(trackWrapper);
-                });
-            });
+            $.getJSON("/getTracks", printTracksFromResponse);
         });
     });
 </script>
@@ -67,17 +109,59 @@
             $.ajax({
                 type: "POST",
                 url: "/play",
-                data: $(this).text(),
+                data: $(this).attr("track_id"),
                 contentType: 'text/plain'
             })
+            $(".track[style]").removeAttr("style");
+            $(this).attr("style", "background: #FFFF99;");
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+//        По клику на трек отправляется запрос на сервер с информацией о том, на какой трек жмакнули
+        $("#goto_playlist").click(function () {
+            $("#all_tracks").hide();
+            $("#playlist").show();
+        });
 
+        $("#goto_all_tracks").click(function () {
+            $("#playlist").hide();
+            $("#all_tracks").show();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#search_button").click(function () {
+            $("#all_music").empty();
+            $.post("/search", $("#search").val(), printTracksFromResponse, "json");
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".playlist_button").click(function (trackClickedEvent) {
+            // prevent "click track" event
+            trackClickedEvent.stopPropagation();
 
-<!--<script src="js/vendor/jquery.js"></script>-->
-<!--<script src="js/vendor/what-input.js"></script>-->
-<!--<script src="js/vendor/foundation.js"></script>-->
-<!--<script src="js/app.js"></script>-->
+            alert("button clicked!");
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#volume_lower").click(function () {
+            $.get("/lower", function(data){
+                $("#volume").text(data);
+            });
+        });
+        $("#volume_higher").click(function () {
+            $.get("/higher", function(data){
+                $("#volume").text(data);
+            });
+        });
+    });
+</script>
 </body>
 </html>

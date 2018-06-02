@@ -7,6 +7,16 @@ public class Track {
 
     private String trackName;
 
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getTrackName() {
         return trackName;
     }
@@ -15,8 +25,9 @@ public class Track {
         this.trackName = trackName;
     }
 
-    public Track(String trackName) {
+    public Track(long id, String trackName) {
         this.trackName = trackName;
+        this.id = id;
     }
 
     public Track() {
